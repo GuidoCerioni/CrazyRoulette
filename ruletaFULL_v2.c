@@ -2,18 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-//variables globales para calcular
-//comparativa rojovsnegro
-//cantidad de numeros rojos o negros seguidos
-//cuantas veces salio cero o multiplos de 10
-//mayor apuesta
-//numero primo
-int apuestastotalesRojo = 0, apuestastotalesNegro = 0,
-    numerosseguidosRojo = 0, numerosseguidosNegro = 0,
-    banderaseguidosRojo = 0, banderaseguidosNegro = 0,
-    salioCero = 0, saliomultiploDiez = 0,
-    contadorderondas = 1, valormayorapuesta = 0, rondamayorapuesta = 0,
-    cantidaddenroprimo = 0, historialPago = 0, historialGanancia = 0;
+
 
 //funciones pa contar las fichas
 int cantfichasApuesta(void)
@@ -252,19 +241,32 @@ int contieneValor(int val, int arr[], int siezeofArr)
 }
 
 // Gira la ruleta
-void giraRuleta(int APUESTASTOTALES[10][4])
+void giraRuleta(int APUESTASTOTALES[10][4],int cantidadRondas,int contadorderondas, int contadortotaldeapuestas,
+int *apuestastotalesRojo, int *apuestastotalesNegro,
+int *numerosseguidosRojo, int *numerosseguidosNegro,
+int *banderaseguidosRojo,int *banderaseguidosNegro,
+int *salioCero, int *saliomultiploDiez,
+int *valormayorapuesta, int *rondamayorapuesta,
+int *cantidaddenroprimo,
+int *historialPago,int *historialGanancia,
+int *contieneapuestasseguidas)
 {
-    int columnaUno[] = {1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34};
-    int columnaDos[] = {2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35};
+
+    int contadorderondasaux;
+    contadorderondasaux=contadorderondas-1;
+    
+
+    int columnaUno[]  = {1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34};
+    int columnaDos[]  = {2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35};
     int columnaTres[] = {3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36};
-    int colorRojo[] = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
-    int colorNegro[] = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
-    int nrosPares[] = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36};
+    int colorRojo[]   = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
+    int colorNegro[]  = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
+    int nrosPares[]   = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36};
     int nrosImpares[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35};
 
     int contiene = 0;
 
-    int numeroGanador, contieneapuestasseguidas = 0;
+    int numeroGanador;
 
     srand(time(0)); //semilla para el nro random, que cambia en cada ejecución del programa
 
@@ -278,32 +280,32 @@ void giraRuleta(int APUESTASTOTALES[10][4])
     printf("===============================\n\n");
 
     //chequeo item de apuestas seguidas rojo o negro
-    contieneapuestasseguidas = contieneValor(numeroGanador, colorRojo, 17);
-    if (contieneapuestasseguidas)
+    *contieneapuestasseguidas = contieneValor(numeroGanador, colorRojo, 17);
+    if (*contieneapuestasseguidas)
     {
-        numerosseguidosRojo++;
-        numerosseguidosNegro = 0;
+        *numerosseguidosRojo=*numerosseguidosRojo + 1;
+        *numerosseguidosNegro = 0;
     }
-    contieneapuestasseguidas = contieneValor(numeroGanador, colorNegro, 17);
-    if (contieneapuestasseguidas)
+    *contieneapuestasseguidas = contieneValor(numeroGanador, colorNegro, 17);
+    if (*contieneapuestasseguidas)
     {
-        numerosseguidosNegro++;
-        numerosseguidosRojo = 0;
+        *numerosseguidosNegro= *numerosseguidosNegro +1;
+        *numerosseguidosRojo = 0;
     }
-    if (numerosseguidosRojo == 5)
-        banderaseguidosRojo++;
+    if (*numerosseguidosRojo == 5)
+        *banderaseguidosRojo= *banderaseguidosRojo +1;
 
-    if (numerosseguidosNegro == 5)
-        banderaseguidosNegro++;
+    if (*numerosseguidosNegro == 5)
+        *banderaseguidosNegro= *banderaseguidosNegro +1;
 
     //chequeo item de cero o multiplos de 10
     if (numeroGanador == 0)
     {
-        salioCero++;
+        *salioCero=  *salioCero +1;
     }
     else if (numeroGanador % 10 == 0)
     {
-        saliomultiploDiez++;
+        *saliomultiploDiez= *saliomultiploDiez +1;
     }
 
     //chequeo si el numero ganador es primo
@@ -320,7 +322,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
         }
 
         if (flagprimo == 0)
-            cantidaddenroprimo++;
+            *cantidaddenroprimo= *cantidaddenroprimo +1;
     }
 
     int bb;
@@ -329,10 +331,10 @@ void giraRuleta(int APUESTASTOTALES[10][4])
         //chequeo el valor de la apuesta (nro de fichas*valor de la ficha)
         int valordeapuesta;
         valordeapuesta = APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2];
-        if (valordeapuesta > valormayorapuesta)
+        if (valordeapuesta > *valormayorapuesta)
         {
-            valormayorapuesta = valordeapuesta;
-            rondamayorapuesta = contadorderondas;
+            *valormayorapuesta = valordeapuesta;
+            *rondamayorapuesta = contadorderondasaux;
         }
 
         // Recorro todas las pos 0 para evaluar el tipo de apuesta se esta por jugar
@@ -352,7 +354,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
 
                 // Se crean los historiales
 
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -365,7 +367,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
 
                 // Se crean los historiales
 
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -379,7 +381,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -389,7 +391,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -404,7 +406,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -414,7 +416,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -428,7 +430,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -438,7 +440,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -455,7 +457,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -465,7 +467,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -482,7 +484,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -492,7 +494,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -509,7 +511,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 3);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -519,7 +521,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -533,7 +535,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -543,7 +545,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -557,7 +559,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -567,7 +569,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -576,7 +578,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
         {
             printf("Apuesta a Color Rojo\n");
 
-            apuestastotalesRojo++;
+            *apuestastotalesRojo= *apuestastotalesRojo +1;
 
             contiene = contieneValor(numeroGanador, colorRojo, 17);
 
@@ -586,7 +588,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -596,7 +598,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -606,7 +608,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
             printf("Apuesta a Color negro\n");
 
             contiene = contieneValor(numeroGanador, colorNegro, 17);
-            apuestastotalesNegro++;
+            *apuestastotalesNegro= *apuestastotalesNegro +1;
 
             if (contiene == 1)
             {
@@ -614,7 +616,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -624,7 +626,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -641,7 +643,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -651,7 +653,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -668,7 +670,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoPaga = ((APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]) * 2);
                 printf("Usted ha ganado!\n");
                 printf("Ganancias de la mano, U$D: %d \n\n", casinoPaga);
-                historialPago += casinoPaga;
+                *historialPago += casinoPaga;
                 break;
             }
 
@@ -678,7 +680,7 @@ void giraRuleta(int APUESTASTOTALES[10][4])
                 int casinoGana = (APUESTASTOTALES[bb][1] * APUESTASTOTALES[bb][2]);
                 printf("Usted ha perdido!\n");
                 printf("Perdidas de la mano, U$D: %d \n\n", casinoGana);
-                historialGanancia += casinoGana;
+                *historialGanancia += casinoGana;
                 break;
             }
         }
@@ -687,15 +689,129 @@ void giraRuleta(int APUESTASTOTALES[10][4])
             break;
         }
     }
+
+    
+    if(contadorderondasaux==cantidadRondas)
+    {   
+        printf("======================\n");
+        printf("DATOS FINALES: \n\n");
+        //DATOS DEL FINAL (ITEMS)
+
+
+        if (*historialGanancia > *historialPago)
+        {
+            printf("Mesa ganadora!\n\n");
+        }
+        else if (*historialGanancia < *historialPago)
+        {
+            printf("Mesa en problemas!\n\n");
+        }
+        else
+        {
+            printf("Mesa no conforme!\n\n");
+        }
+        //promedio
+        float promedio, aux1;   
+        aux1 = cantidadRondas;
+        promedio = contadortotaldeapuestas / aux1;
+        printf("El promedio de apuestas por ronda es: %.2f \n", promedio);
+
+        printf("\n");
+
+        //apuesta de mayor valor monetario
+        printf("La apuesta de mayor valor fue de %dU$D,\ny se hizo en la ronda %d.\n",
+            *valormayorapuesta, *rondamayorapuesta);
+
+        printf("\n");
+
+        //comparativa ROJOvsNEGRO
+        float totalrojonegro, porcRojo, porcNegro;
+        totalrojonegro = *apuestastotalesNegro + *apuestastotalesRojo;
+        printf("Comparativa de porcentaje Rojo vs Negro:\n");
+        if (totalrojonegro > 0)
+        {
+            if (*apuestastotalesNegro > 0)
+            {
+                porcNegro = (*apuestastotalesNegro / totalrojonegro) * 100;
+                printf("El porcentaje de apuestas al Negro es %.2f%%\n", porcNegro);
+            }
+            else
+                printf("No se ha apostado al negro\n");
+
+            if (*apuestastotalesRojo > 0)
+            {
+                porcRojo = (*apuestastotalesRojo / totalrojonegro) * 100;
+                printf("El porcentaje de apuestas Rojo es %.2f%%\n", porcRojo);
+            }
+            else
+                printf("No se ha apostado al rojo\n");
+        }
+        else
+        {
+            printf("No se ha apostado nunca al rojo ni al negro. \n\n");
+        }
+
+        printf("\n");
+
+        //si en mas de 5 rondas seguidas salio el mismo color
+        printf("Cantidad de veces que salieron 5 numeros del mismo color seguidos:\n");
+        printf(" Rojos: %d\n", *banderaseguidosRojo);
+        printf(" Negros: %d\n", *banderaseguidosNegro);
+
+        printf("\n");
+
+        //si salio cero o multiplos de 10
+        if (*salioCero == 0)
+            printf("El cero no salio ninguna vez.\n");
+        else
+            printf("Cantidad de veces que salio cero: %d \n", *salioCero);
+
+        if (*saliomultiploDiez == 0)
+            printf("No salieron multiplos de 10.\n");
+        else
+            printf("Cantidad de veces que salio un nro multiplo de 10: %d \n", *saliomultiploDiez);
+
+        printf("\n");
+
+        //cantidad de nros ganadores primos
+        if (*cantidaddenroprimo > 0)
+        {
+            printf("La cantidad de numeros ganadores primos es: %d\n", *cantidaddenroprimo);
+        }
+        else
+        {
+            printf("No hubo numeros primos ganadores.\n\n");
+        }
+
+        //dinero ganado/pagado por la mesa
+        printf("Dinero ganado por la mesa: %d U$D\n", *historialGanancia);
+
+        printf("Dinero pagado por la mesa: %d U$D\n", *historialPago);
+    }
+
 }
 
 int main()
 {
-    int tipoapuesta, cantfichas, valorfichas, numeroelegido;
-    int option, cantidadRondas, contadorTotaldeApuestas = 0, bandera = 0, contadordeapuestas = 0;
-    int apuesta[] = {0, 0, 0, 40};
+    int tipoapuesta, cantfichas, valorfichas, numeroelegido;//4 valores para llenar la tabla
+    int option, cantidadRondas, contadortotaldeapuestas = 0, bandera = 0, contadordeapuestas = 0;
+    int contadorderondas = 1;
 
-    //apuesta es el array donde guardo temporalmente cada fila de la tabla
+    //variables globales para calcular
+    //comparativa rojovsnegro
+    //cantidad de numeros rojos o negros seguidos
+    //cuantas veces salio cero o multiplos de 10
+    //mayor apuesta
+    //numero primo
+    //historiales
+    int apuestastotalesRojo = 0, apuestastotalesNegro = 0,
+        numerosseguidosRojo = 0, numerosseguidosNegro = 0,
+        banderaseguidosRojo = 0, banderaseguidosNegro = 0,
+        salioCero = 0, saliomultiploDiez = 0,
+        valormayorapuesta = 0, rondamayorapuesta = 0,
+        cantidaddenroprimo = 0, historialPago = 0,
+        historialGanancia = 0, contieneapuestasseguidas = 0;
+
     int APUESTASTOTALES[10][4];
     //APUESTASTOTALES es TABLA de 10 filas y 4 columnas donde guardo una apuesta por fila
     printf("Hola\n");
@@ -763,142 +879,67 @@ int main()
 
             switch (option)
             {
-            case 1:
-            {
-                realizarApuestas(&tipoapuesta, &cantfichas, &valorfichas, &numeroelegido);
-                int aa;
-                aa = contadordeapuestas; //aa=indice para ir guardando el la tabla
-                contadordeapuestas++;
-                contadorTotaldeApuestas++;
+                case 1:
+                {
+                    realizarApuestas(&tipoapuesta, &cantfichas, &valorfichas, &numeroelegido);
+                    int aa;
+                    aa = contadordeapuestas; //aa=indice para ir guardando el la tabla
+                    contadordeapuestas++;
+                    contadortotaldeapuestas++;
 
-                APUESTASTOTALES[aa][0] = tipoapuesta;
-                APUESTASTOTALES[aa][1] = valorfichas;
-                APUESTASTOTALES[aa][2] = cantfichas;
-                APUESTASTOTALES[aa][3] = numeroelegido;
+                    APUESTASTOTALES[aa][0] = tipoapuesta;
+                    APUESTASTOTALES[aa][1] = valorfichas;
+                    APUESTASTOTALES[aa][2] = cantfichas;
+                    APUESTASTOTALES[aa][3] = numeroelegido;
 
-                break;
+                    break;
+                }
+
+                case 2:
+                {
+                    giraRuleta(APUESTASTOTALES,cantidadRondas,contadorderondas,contadortotaldeapuestas,
+                    &apuestastotalesRojo, &apuestastotalesNegro,
+                    &numerosseguidosRojo, &numerosseguidosNegro,
+                    &banderaseguidosRojo,&banderaseguidosNegro,
+                    &salioCero, &saliomultiploDiez, &valormayorapuesta, &rondamayorapuesta,
+                    &cantidaddenroprimo,
+                    &historialPago,&historialGanancia,&contieneapuestasseguidas);
+
+
+                    bandera = 1;
+                    break;
+                }
+                case 3:
+                {
+                    printf("Gracias! Vuelva pronto.\n");
+                    return 0;
+                }
+
+                default:{
+                    break;}
+            
             }
-
-            case 2:
-            {
-                giraRuleta(APUESTASTOTALES);
-                bandera = 1;
-                break;
-            }
-            case 3:
-            {
-                printf("Gracias! Vuelva pronto.\n");
-                return 0;
-            }
-
-            default:
-                break;
-            }
-
+            
             if (bandera == 1)
+            {
                 break;
+            }
         }
         if (bandera == 0)
         {
             printf("Ya no puede realizar mas apuestas\nGirando ruleta\n\n");
-            giraRuleta(APUESTASTOTALES);
+            giraRuleta(APUESTASTOTALES,cantidadRondas,contadorderondas,contadortotaldeapuestas,
+            &apuestastotalesRojo, &apuestastotalesNegro,
+            &numerosseguidosRojo, &numerosseguidosNegro,
+            &banderaseguidosRojo,&banderaseguidosNegro,
+            &salioCero, &saliomultiploDiez,
+            &valormayorapuesta, &rondamayorapuesta,
+            &cantidaddenroprimo,
+            &historialPago,&historialGanancia,&contieneapuestasseguidas );
         }
     }
+    
 
-    printf("======================\n");
-    printf("DATOS FINALES: \n\n");
-    //DATOS DEL FINAL (ITEMS)
-
-
-    if (historialGanancia > historialPago)
-    {
-        printf("Mesa ganadora!\n\n");
-    }
-    else if (historialGanancia < historialPago)
-    {
-        printf("Mesa en problemas!\n\n");
-    }
-    else
-    {
-        printf("Mesa no conforme!\n\n");
-    }
-    //promedio
-    float promedio, aux1;   
-    aux1 = cantidadRondas;
-    promedio = contadorTotaldeApuestas / aux1;
-    printf("El promedio de apuestas por ronda es: %.2f \n", promedio);
-
-    printf("\n");
-
-    //apuesta de mayor valor monetario
-    printf("La apuesta de mayor valor fue de %dU$D,\ny se hizo en la ronda %d.\n",
-           valormayorapuesta, rondamayorapuesta);
-
-    printf("\n");
-
-    //comparativa ROJOvsNEGRO
-    float totalrojonegro, porcRojo, porcNegro;
-    totalrojonegro = apuestastotalesNegro + apuestastotalesRojo;
-    printf("Comparativa de porcentaje Rojo vs Negro:\n");
-    if (totalrojonegro > 0)
-    {
-        if (apuestastotalesNegro > 0)
-        {
-            porcNegro = (apuestastotalesNegro / totalrojonegro) * 100;
-            printf("El porcentaje de apuestas al Negro es %.2f%%\n", porcNegro);
-        }
-        else
-            printf("No se ha apostado al negro\n");
-
-        if (apuestastotalesRojo > 0)
-        {
-            porcRojo = (apuestastotalesRojo / totalrojonegro) * 100;
-            printf("El porcentaje de apuestas Rojo es %.2f%%\n", porcRojo);
-        }
-        else
-            printf("No se ha apostado al rojo\n");
-    }
-    else
-    {
-        printf("No se ha apostado nunca al rojo ni al negro. \n\n");
-    }
-
-    printf("\n");
-
-    //si en mas de 5 rondas seguidas salio el mismo color
-    printf("Cantidad de veces que salieron 5 numeros del mismo color seguidos:\n");
-    printf(" Rojos: %d\n", banderaseguidosRojo);
-    printf(" Negros: %d\n", banderaseguidosNegro);
-
-    printf("\n");
-
-    //si salio cero o multiplos de 10
-    if (salioCero == 0)
-        printf("El cero no salio ninguna vez.\n");
-    else
-        printf("Cantidad de veces que salio cero: %d \n", salioCero);
-
-    if (saliomultiploDiez == 0)
-        printf("No salieron multiplos de 10.\n");
-    else
-        printf("Cantidad de veces que salio un nro multiplo de 10: %d \n", saliomultiploDiez);
-
-    printf("\n");
-
-    //cantidad de nros ganadores primos
-    if (cantidaddenroprimo > 0)
-    {
-        printf("La cantidad de numeros ganadores primos es: %d", cantidaddenroprimo);
-    }
-    else
-    {
-        printf("No hubo numeros primos ganadores.\n\n");
-    }
-
-    //dinero ganado/pagado por la mesa
-    printf("Dinero ganado por la mesa: %d U$D\n", historialGanancia);
-
-    printf("Dinero pagado por la mesa: %d U$D\n", historialPago);
 
     return 0;
 }

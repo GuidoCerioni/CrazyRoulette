@@ -4,8 +4,8 @@
 ### Prerequisitos
 
 #### Para compilar el archivo
-  [GNU Compiler Collection](https://gcc.gnu.org/)
-  [libc6-dev](https://packages.debian.org/es/sid/libc6-dev)
+  *[GNU Compiler Collection](https://gcc.gnu.org/)
+  *[libc6-dev](https://packages.debian.org/es/sid/libc6-dev)
 
 ```
 sudo apt-get install libc6-dev

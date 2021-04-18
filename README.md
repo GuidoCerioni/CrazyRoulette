@@ -11,6 +11,6 @@
 Tip 💡: para seleccionar las opciones se debe ingresar el numero (entre []) de la opción deseada y luego presionar Enter.
 1. Seleccionar cantidad de rondas.
 2. Realizar apuestas.
-i. aaa
-ii. aaa
+  i. aaa
+  ii. aaa
 4. 

@@ -8,5 +8,9 @@
 - [libc6-dev](https://packages.debian.org/es/sid/libc6-dev)
 
 ### Instrucciones:
-- 1 Seleccionar cantidad de rondas.
-- 
+Tip 💡: para seleccionar las opciones se debe ingresar el numero (entre []) de la opción deseada y luego presionar Enter.
+1. Seleccionar cantidad de rondas.
+2. Realizar apuestas.
+i. aaa
+ii. aaa
+4. 

@@ -11,9 +11,9 @@
 Tip 💡: para seleccionar las opciones se debe ingresar el numero (entre "[ ]") de la opción deseada y luego presionar Enter.
 1. Seleccionar cantidad de rondas.
 2. Realizar apuestas.
-  1. Seleccionar a que se desea apostar.
-  2. Elegir el valor de la ficha a apostar.
-  3. Elegir la cantidad de fichas del valor seleccionado.
+  + Seleccionar a que se desea apostar.
+  + Elegir el valor de la ficha a apostar.
+  + Elegir la cantidad de fichas del valor seleccionado.
 3. Una vez finalizadas las apuestas, Girar la ruleta (opción 2).
 
 ### Funciones extra:
